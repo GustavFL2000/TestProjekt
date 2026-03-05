@@ -3,16 +3,17 @@ package ordination;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-/**
- * Modellerer en ordination.
- */
 public abstract class Ordination {
     private LocalDate startDen;
     private LocalDate slutDen;
+
+
+    //Link til Laegemiddel
     private Laegemiddel laegemiddel;
 
     /**
-     * Initialiserer en ny ordinations start- og slutdato.
+     *  Initialiserer en ny Ordination med startdato, slutdato og et lægemiddel.
+     *  pre:
      * @param startDen
      * @param slutDen
      * @param laegemiddel
@@ -23,8 +24,10 @@ public abstract class Ordination {
         this.laegemiddel = laegemiddel;
     }
 
+
     /**
-     * Initialiserer en ny ordinations start- og slutdato.
+     * Initialiserer en ny Ordination med startdato og slutdato
+     * pre:
      * @param startDen
      * @param slutDen
      */
@@ -32,6 +35,23 @@ public abstract class Ordination {
         this.startDen = startDen;
         this.slutDen = slutDen;
     }
+
+
+    /**
+     * Registrerer Ordinationens lægemiddel
+     * pre:
+     * @param laegemiddel
+     */
+    public void setLaegemiddel(Laegemiddel laegemiddel) {
+        if (this.laegemiddel != laegemiddel) {
+            this.laegemiddel = laegemiddel;
+        }
+    }
+
+    public Laegemiddel getLaegemiddel() {
+        return this.laegemiddel;
+    }
+
 
     public LocalDate getStartDen() {
         return startDen;
@@ -71,18 +91,4 @@ public abstract class Ordination {
      * @return
      */
     public abstract String getType();
-
-    /**
-     * Sætter lægemidlet til at være denne ordinations lægemiddel
-     * @param laegemiddel
-     */
-    public void setLaegemiddel(Laegemiddel laegemiddel) {
-        if (this.laegemiddel != laegemiddel) {
-            this.laegemiddel = laegemiddel;
-        }
-    }
-
-    public Laegemiddel getLaegemiddel() {
-        return laegemiddel;
-    }
 }

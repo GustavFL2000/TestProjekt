@@ -2,13 +2,15 @@ package ordination;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Patient {
     private String cprnr;
     private String navn;
     private double vaegt;
 
-    private List<Ordination> ordinations = new ArrayList<>();
+    // TODO: Link til Ordination
+    private List<Ordination> ordinationer = new ArrayList<>();
 
     public Patient(String cprnr, String navn, double vaegt) {
         this.cprnr = cprnr;
@@ -36,30 +38,21 @@ public class Patient {
         this.vaegt = vaegt;
     }
 
-    /**
-     * Tilføjer en ny orination til listen.
-     * @param ordination
-     */
+    //TODO: Metoder (med specifikation) til at vedligeholde link til Ordination
     public void addOrdination(Ordination ordination) {
-        ordinations.add(ordination);
+        ordinationer.add(ordination);
     }
 
-    /**
-     * Fjerner en ordination fra listen.
-     * @param ordination
-     */
-    public void removeOrdination(Ordination ordination) {
-        if (ordinations.contains(ordination)) {
-            ordinations.remove(ordination);
+    public List<Ordination> getOrdinationer() {
+        return new ArrayList<>(ordinationer);
+    }
+
+
+    public void removeOrdination(Ordination ordination){
+        if(!ordinationer.contains(ordination)){
+            throw new NoSuchElementException("Denne ordination findes ikke for patienten");
         }
-    }
-
-    /**
-     * Henter en ny liste af ordinationer.
-     * @return
-     */
-    public ArrayList<Ordination> getOrdinations() {
-        return new ArrayList<>(ordinations);
+        else ordinationer.remove(ordination);
     }
 
     @Override
