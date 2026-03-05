@@ -7,8 +7,46 @@ public abstract class Ordination {
     private LocalDate startDen;
     private LocalDate slutDen;
 
-    // TODO Link til Laegemiddel
-    // TODO constructor (med specifikation)
+    // TO DO Link til Laegemiddel
+    private Laegemiddel lagemiddel;
+
+    // TO DO constructor (med specifikation)
+
+    /**
+     * Contructor med lægemiddel
+     * @param startDen
+     * @param slutDen
+     * @param lagemiddel
+     */
+    public Ordination(LocalDate startDen, LocalDate slutDen, Laegemiddel lagemiddel) {
+        this.startDen = startDen;
+        this.slutDen = slutDen;
+        this.lagemiddel = lagemiddel;
+    }
+
+    /**
+     * Contructor uden lægemiddel
+     * @param startDen
+     * @param slutDen
+     */
+    public Ordination(LocalDate startDen, LocalDate slutDen) {
+        this.startDen = startDen;
+        this.slutDen = slutDen;
+    }
+
+    /**
+     * Setter metode til lægemiddel
+     * @param lagemiddel
+     */
+    public void setLagemiddel(Laegemiddel lagemiddel) {
+        if (this.lagemiddel != lagemiddel) {
+            this.lagemiddel = lagemiddel;
+        }
+    }
+
+    public Laegemiddel getLagemiddel() {
+        return lagemiddel;
+    }
 
     public LocalDate getStartDen() {
         return startDen;
