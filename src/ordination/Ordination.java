@@ -7,8 +7,51 @@ public abstract class Ordination {
     private LocalDate startDen;
     private LocalDate slutDen;
 
-    // TODO Link til Laegemiddel
-    // TODO constructor (med specifikation)
+
+    //Link til Laegemiddel
+    Laegemiddel laegemiddel;
+
+    /**
+     *  Initialiserer en ny Ordination med startdato, slutdato og et lægemiddel.
+     *  pre:
+     * @param startDen
+     * @param slutDen
+     * @param laegemiddel
+     */
+    public Ordination(LocalDate startDen, LocalDate slutDen, Laegemiddel laegemiddel) {
+        this.startDen = startDen;
+        this.slutDen = slutDen;
+        this.laegemiddel = laegemiddel;
+    }
+
+
+    /**
+     * Initialiserer en ny Ordination med startdato og slutdato
+     * pre:
+     * @param startDen
+     * @param slutDen
+     */
+    public Ordination(LocalDate startDen, LocalDate slutDen) {
+        this.startDen = startDen;
+        this.slutDen = slutDen;
+    }
+
+
+    /**
+     * Registrerer Ordinationens lægemiddel
+     * pre:
+     * @param laegemiddel
+     */
+    public void setLaegemiddel(Laegemiddel laegemiddel) {
+        if (this.laegemiddel != laegemiddel) {
+            this.laegemiddel = laegemiddel;
+        }
+    }
+
+    public Laegemiddel getLaegemiddel() {
+        return this.laegemiddel;
+    }
+
 
     public LocalDate getStartDen() {
         return startDen;

@@ -2,9 +2,32 @@ package ordination;
 
 import java.time.LocalDate;
 
-public class PN {
+public class PN extends Ordination{
 
     private double antalEnheder;
+
+    /**
+     * Initialiserer en ny Ordination med startdato, slutdato og et lægemiddel.
+     * pre:
+     *
+     * @param startDen
+     * @param slutDen
+     * @param laegemiddel
+     */
+    public PN(LocalDate startDen, LocalDate slutDen, Laegemiddel laegemiddel) {
+        super(startDen, slutDen, laegemiddel);
+    }
+
+    /**
+     * Initialiserer en ny Ordination med startdato og slutdato
+     * pre:
+     *
+     * @param startDen
+     * @param slutDen
+     */
+    public PN(LocalDate startDen, LocalDate slutDen) {
+        super(startDen, slutDen);
+    }
 
     /**
      * Registrerer at der er givet en dosis paa dagen givesDen
@@ -21,6 +44,16 @@ public class PN {
     public double doegnDosis() {
         // TODO
         return 0.0;
+    }
+
+    /**
+     * Returnerer ordinationstypen som en String
+     *
+     * @return
+     */
+    @Override
+    public String getType() {
+        return "";
     }
 
 
