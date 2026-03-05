@@ -7,25 +7,27 @@ public abstract class Ordination {
     private LocalDate startDen;
     private LocalDate slutDen;
 
-    // TO DO Link til Laegemiddel
-    private Laegemiddel lagemiddel;
 
-    // TO DO constructor (med specifikation)
+    //Link til Laegemiddel
+    private Laegemiddel laegemiddel;
 
     /**
-     * Contructor med lægemiddel
+     *  Initialiserer en ny Ordination med startdato, slutdato og et lægemiddel.
+     *  pre:
      * @param startDen
      * @param slutDen
-     * @param lagemiddel
+     * @param laegemiddel
      */
-    public Ordination(LocalDate startDen, LocalDate slutDen, Laegemiddel lagemiddel) {
+    public Ordination(LocalDate startDen, LocalDate slutDen, Laegemiddel laegemiddel) {
         this.startDen = startDen;
         this.slutDen = slutDen;
-        this.lagemiddel = lagemiddel;
+        this.laegemiddel = laegemiddel;
     }
 
+
     /**
-     * Contructor uden lægemiddel
+     * Initialiserer en ny Ordination med startdato og slutdato
+     * pre:
      * @param startDen
      * @param slutDen
      */
@@ -34,19 +36,22 @@ public abstract class Ordination {
         this.slutDen = slutDen;
     }
 
+
     /**
-     * Setter metode til lægemiddel
-     * @param lagemiddel
+     * Registrerer Ordinationens lægemiddel
+     * pre:
+     * @param laegemiddel
      */
-    public void setLagemiddel(Laegemiddel lagemiddel) {
-        if (this.lagemiddel != lagemiddel) {
-            this.lagemiddel = lagemiddel;
+    public void setLaegemiddel(Laegemiddel laegemiddel) {
+        if (this.laegemiddel != laegemiddel) {
+            this.laegemiddel = laegemiddel;
         }
     }
 
-    public Laegemiddel getLagemiddel() {
-        return lagemiddel;
+    public Laegemiddel getLaegemiddel() {
+        return this.laegemiddel;
     }
+
 
     public LocalDate getStartDen() {
         return startDen;
@@ -86,8 +91,4 @@ public abstract class Ordination {
      * @return
      */
     public abstract String getType();
-
-    public Laegemiddel getLaegemiddel() {
-        return lagemiddel;
-    }
 }
