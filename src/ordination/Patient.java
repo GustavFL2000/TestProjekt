@@ -36,10 +36,8 @@ public class Patient {
         this.vaegt = vaegt;
     }
 
-    //TODO: Metoder (med specifikation) til at vedligeholde link til Ordination
-
     /**
-     * Tilføjer en ny orination til listen
+     * Tilføjer en ny orination til listen.
      * @param ordination
      */
     public void addOrdination(Ordination ordination) {
@@ -47,7 +45,7 @@ public class Patient {
     }
 
     /**
-     * Fjerner en ordination fra listen
+     * Fjerner en ordination fra listen.
      * @param ordination
      */
     public void removeOrdination(Ordination ordination) {
@@ -57,7 +55,7 @@ public class Patient {
     }
 
     /**
-     * Henter en ny liste af
+     * Henter en ny liste af ordinationer.
      * @return
      */
     public ArrayList<Ordination> getOrdinations() {

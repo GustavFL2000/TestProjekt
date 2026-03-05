@@ -1,8 +1,10 @@
 package ordination;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class DagligFast extends Ordination{
+    private Dosis[] doser = new Dosis[4];
 
     public DagligFast(LocalDate startDen, LocalDate slutDen, Laegemiddel laegemiddel) {
         super(startDen, slutDen, laegemiddel);
@@ -14,20 +16,21 @@ public class DagligFast extends Ordination{
 
     @Override
     public double samletDosis() {
-        //TODO
-        return 0;
+        double antalPillerOmDagen = 0;
+        for (Dosis dosis : doser) {
+            antalPillerOmDagen += dosis.getAntal();
+        }
+        return antalDage() * antalPillerOmDagen;
     }
 
     @Override
     public double doegnDosis() {
-        //TODO
-        return 0;
+        return samletDosis() / antalDage() ;
     }
 
     @Override
     public String getType() {
-        //TODO
-        return "";
+        return "FAST";
     }
 
 
