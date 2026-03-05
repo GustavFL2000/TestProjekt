@@ -33,6 +33,8 @@ public class DagligFast extends Ordination{
         return "FAST";
     }
 
-
-
+    public Dosis[] getDoser() {
+        Dosis[] tempdoser = doser;
+        return tempdoser;
+    }
 }
