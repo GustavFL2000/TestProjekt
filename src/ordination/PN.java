@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class PN extends Ordination{
+public class PN extends Ordination {
 
     private double antalEnheder; // mængde af medicin ved behov
 
-    private double antalGange;
+    private int antalGangeGivet = 0;
     private List<LocalDate> datoerGivetMedicin = new ArrayList<>();
 
     public PN(LocalDate startDen, LocalDate slutDen, Laegemiddel lagemiddel) {
         super(startDen, slutDen, lagemiddel);
-        this.antalGange = 0;
+        this.antalGangeGivet = 0;
         this.antalEnheder = 0;
     }
 
     public PN(LocalDate startDen, LocalDate slutDen) {
         super(startDen, slutDen);
-        this.antalGange = 0;
+        this.antalGangeGivet = 0;
         this.antalEnheder = 0;
     }
 
@@ -29,23 +29,28 @@ public class PN extends Ordination{
      * Registrerer at der er givet en dosis paa dagen givesDen
      * Returnerer true hvis givesDen er inden for ordinationens gyldighedsperiode og datoen huskes
      * Retrurner false ellers og datoen givesDen ignoreres
+     *
      * @param givesDen
      * @return
      */
     public boolean givDosis(LocalDate givesDen) {
-        // TODO
-        return false;   
+        if (givesDen.isAfter(getStartDen().minusDays(1)) && givesDen.isBefore(getSlutDen().plusDays(1))) {
+            datoerGivetMedicin.add(givesDen);
+            antalGangeGivet++;
+            return true;
+        }
+        return false;
     }
 
-    // (antal gange ordinationen er anvendt * antal enheder) / (antal dage mellem første og sidste givning)
+
     public double doegnDosis() {
-        double dosis = 0;
-        dosis = (antalGange * antalEnheder) / forskelFørsteOgSidste();
-        return dosis;
+        return samletDosis() / forskelFørsteOgSidste();
+        // (antal gange ordinationen er anvendt * antal enheder) / (antal dage mellem første og sidste givning)
     }
 
     /**
      * Beregner dagene mellem første og sidste dag givet medicin
+     *
      * @return {@code -1} hvis der ikke er givet medicin endnu, ellers gives
      * forskellen på første og sidste dag givet medicin
      */
@@ -80,17 +85,16 @@ public class PN extends Ordination{
 
 
     public double samletDosis() {
-        // TODO
-        return 0.0;
+        return antalGangeGivet * antalEnheder;
     }
 
     /**
      * Returnerer antal gange ordinationen er anvendt
+     *
      * @return
      */
     public int getAntalGangeGivet() {
-        // TODO
-        return-1;
+        return antalGangeGivet;
     }
 
     public double getAntalEnheder() {
