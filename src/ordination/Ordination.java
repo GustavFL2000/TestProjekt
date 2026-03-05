@@ -9,7 +9,7 @@ public abstract class Ordination {
 
 
     //Link til Laegemiddel
-    Laegemiddel laegemiddel;
+    private Laegemiddel laegemiddel;
 
     /**
      *  Initialiserer en ny Ordination med startdato, slutdato og et lægemiddel.
