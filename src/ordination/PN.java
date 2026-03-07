@@ -13,16 +13,16 @@ public class PN extends Ordination {
     private int antalGangeGivet = 0;
     private List<LocalDate> datoerGivetMedicin = new ArrayList<>();
 
-    public PN(LocalDate startDen, LocalDate slutDen, Laegemiddel lagemiddel) {
+    public PN(LocalDate startDen, LocalDate slutDen, Laegemiddel lagemiddel, double antalEnheder) {
         super(startDen, slutDen, lagemiddel);
         this.antalGangeGivet = 0;
-        this.antalEnheder = 0;
+        this.antalEnheder = antalEnheder;
     }
 
-    public PN(LocalDate startDen, LocalDate slutDen) {
+    public PN(LocalDate startDen, LocalDate slutDen, double antalEnheder) {
         super(startDen, slutDen);
         this.antalGangeGivet = 0;
-        this.antalEnheder = 0;
+        this.antalEnheder = antalEnheder;
     }
 
     /**

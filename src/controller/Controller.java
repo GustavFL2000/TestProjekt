@@ -3,6 +3,7 @@ package controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 import ordination.DagligFast;
 import ordination.DagligSkaev;
@@ -39,8 +40,25 @@ public class Controller {
 	 */
 	public PN opretPNOrdination(LocalDate startDen, LocalDate slutDen,
 			Patient patient, Laegemiddel laegemiddel, double antal) {
-		// TODO
-		return null;
+		// TODO: Test metode om virker i GUI
+		// Tjekker om nogle værdier er null, hvis det er; sender en NullPointerException med beskeden.
+		Objects.requireNonNull(startDen, "startDen må ikke være null");
+		Objects.requireNonNull(slutDen, "slutDen må ikke være null");
+		Objects.requireNonNull(patient, "patient må ikke være null");
+		Objects.requireNonNull(laegemiddel, "laegemiddel må ikke være null");
+
+		if (startDen.isAfter(slutDen)) {
+			throw new IllegalArgumentException("Fejl: Startdato skal være før slutdato");
+        }
+
+		if (antal < 0) {
+			throw new IllegalArgumentException("Fejl: Antal skal være positivt tal.");
+		}
+
+		PN newPn = new PN(startDen,slutDen,laegemiddel, antal);
+		patient.addOrdination(newPn);
+
+		return newPn;
 	}
 
 	/**
@@ -79,7 +97,17 @@ public class Controller {
 	 * Pre: ordination og dato er ikke null
 	 */
 	public void ordinationPNAnvendt(PN ordination, LocalDate dato) {
-		// TODO
+		// TODO: Test metode om virker i GUI
+		// Tjekker om nogle værdier er null, hvis det er; sender en NullPointerException med beskeden.
+		Objects.requireNonNull(ordination, "Ordination må ikke ære null");
+		Objects.requireNonNull(dato, "Dato må ikke være null");
+
+		boolean gyldigAnvendt = ordination.givDosis(dato);
+		// Hvis givDosis returnere false er datoen for ardinationen ikke gyldig og fejl sendes
+		if (!gyldigAnvendt) {
+			throw new IllegalArgumentException("Fejl: Dato for andvendelse af ordination " +
+					"er ikke indenfor gyldighedsperiode");
+		}
 	}
 
 	/**
