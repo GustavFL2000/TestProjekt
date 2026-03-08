@@ -65,12 +65,20 @@ public class Controller {
 	 * Pre: startDen, slutDen, patient og laegemiddel er ikke null
 	 * Pre: alle tal i antalEnheder > 0
 	 */
-	public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen,
-			LocalDate slutDen, Patient patient, Laegemiddel laegemiddel,
-			LocalTime[] klokkeSlet, double[] antalEnheder) {
-		// TODO
-		return null;
-	}
+    public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, LocalTime[] klokkeSlet, double[] antalEnheder) {
+        if (startDen.isAfter(slutDen)) {
+            throw new IllegalArgumentException("Startdato er efter slutdato");
+        }
+        if (klokkeSlet.length != antalEnheder.length) {
+            throw new IllegalArgumentException("Arrays har ikke samme længde");
+        }
+        DagligSkaev dagligSkaev = new DagligSkaev(startDen, slutDen, laegemiddel);
+        for (int i = 0; i < klokkeSlet.length; i++) {
+            dagligSkaev.opretDosis(klokkeSlet[i], antalEnheder[i]);
+        }
+        patient.addOrdination(dagligSkaev);
+        return dagligSkaev;
+    }
 
 	/**
 	 * En dato for hvornår ordinationen anvendes tilføjes ordinationen. Hvis
