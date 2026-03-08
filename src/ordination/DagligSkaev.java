@@ -32,7 +32,7 @@ public class DagligSkaev extends Ordination{
         doser.add(dosis);
     }
 
-    public ArrayList<Dosis> getDosis() {
+    public ArrayList<Dosis> getDoser() {
         return new ArrayList<>(doser);
     }
 
