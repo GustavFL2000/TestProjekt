@@ -4,11 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import ordination.DagligFast;
-import ordination.DagligSkaev;
-import ordination.Laegemiddel;
-import ordination.PN;
-import ordination.Patient;
+import ordination.*;
 import storage.Storage;
 
 public class Controller {
@@ -37,8 +33,7 @@ public class Controller {
 	 * Pre: antal >= 0
 	 * @return opretter og returnerer en PN ordination.
 	 */
-	public PN opretPNOrdination(LocalDate startDen, LocalDate slutDen,
-			Patient patient, Laegemiddel laegemiddel, double antal) {
+	public PN opretPNOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, double antal) {
 		// TODO
 		return null;
 	}
@@ -49,12 +44,26 @@ public class Controller {
 	 * Pre: startDen, slutDen, patient og laegemiddel er ikke null
 	 * Pre: margenAntal, middagAntal, aftanAntal, natAntal >= 0
 	 */
-	public DagligFast opretDagligFastOrdination(LocalDate startDen,
-			LocalDate slutDen, Patient patient, Laegemiddel laegemiddel,
-			double morgenAntal, double middagAntal, double aftenAntal,
-			double natAntal) {
-		// TODO
-		return null;
+	public DagligFast opretDagligFastOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, double morgenAntal, double middagAntal, double aftenAntal, double natAntal) {
+
+		// Controllerer at startdato er før slutdato.
+		if (!checkStartFoerSlut(startDen, slutDen)){
+			throw new IllegalArgumentException("Startdato skal være før eller lig med slutdato");
+		}
+
+		// Opretter dagligFast objektet
+		DagligFast dagligFast = new DagligFast(startDen, slutDen, laegemiddel);
+
+		// Opretter de 4 doser med de input parametre, som en Dosis skal have. (Tidspunkt og antal).
+		dagligFast.getDoser()[0] = new Dosis(LocalTime.of(8,0), morgenAntal);
+		dagligFast.getDoser()[1] = new Dosis(LocalTime.of(12, 0), middagAntal);
+		dagligFast.getDoser()[2] = new Dosis(LocalTime.of(18, 0), aftenAntal);
+		dagligFast.getDoser()[3] = new Dosis(LocalTime.of(23,59), natAntal);
+
+		// Tilføjer ordinationen til patienten.
+		patient.addOrdination(dagligFast);
+
+		return dagligFast;
 	}
 
 	/**
@@ -65,9 +74,7 @@ public class Controller {
 	 * Pre: startDen, slutDen, patient og laegemiddel er ikke null
 	 * Pre: alle tal i antalEnheder > 0
 	 */
-	public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen,
-			LocalDate slutDen, Patient patient, Laegemiddel laegemiddel,
-			LocalTime[] klokkeSlet, double[] antalEnheder) {
+	public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, LocalTime[] klokkeSlet, double[] antalEnheder) {
 		// TODO
 		return null;
 	}
@@ -98,10 +105,20 @@ public class Controller {
 	 * ordinationer.
 	 * Pre: laegemiddel er ikke null
 	 */
-	public int antalOrdinationerPrVægtPrLægemiddel(double vægtStart,
-			double vægtSlut, Laegemiddel laegemiddel) {
-		// TODO
-		return 0;
+	public int antalOrdinationerPrVægtPrLægemiddel(double vægtStart, double vægtSlut, Laegemiddel laegemiddel) {
+		int sumOrdinationer = 0;
+		if (laegemiddel != null) {
+			for (Patient patient : storage.getAllPatienter()) {
+				for (Ordination ordination : patient.getOrdinationer()) {
+					if (ordination.getLaegemiddel().equals(laegemiddel)) {
+						if (patient.getVaegt() >= vægtStart && patient.getVaegt() <= vægtSlut) {
+							sumOrdinationer++;
+						}
+					}
+				}
+			}
+		}
+		return sumOrdinationer;
 	}
 
 	public List<Patient> getAllPatienter() {
@@ -132,11 +149,8 @@ public class Controller {
 		return p;
 	}
 
-	public Laegemiddel opretLaegemiddel(String navn,
-			double enhedPrKgPrDoegnLet, double enhedPrKgPrDoegnNormal,
-			double enhedPrKgPrDoegnTung, String enhed) {
-		Laegemiddel lm = new Laegemiddel(navn, enhedPrKgPrDoegnLet,
-				enhedPrKgPrDoegnNormal, enhedPrKgPrDoegnTung, enhed);
+	public Laegemiddel opretLaegemiddel(String navn, double enhedPrKgPrDoegnLet, double enhedPrKgPrDoegnNormal, double enhedPrKgPrDoegnTung, String enhed) {
+		Laegemiddel lm = new Laegemiddel(navn, enhedPrKgPrDoegnLet, enhedPrKgPrDoegnNormal, enhedPrKgPrDoegnTung, enhed);
 		storage.addLaegemiddel(lm);
 		return lm;
 	}

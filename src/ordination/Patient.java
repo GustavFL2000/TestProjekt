@@ -9,7 +9,6 @@ public class Patient {
     private String navn;
     private double vaegt;
 
-    // TODO: Link til Ordination
     private List<Ordination> ordinationer = new ArrayList<>();
 
     public Patient(String cprnr, String navn, double vaegt) {
@@ -38,7 +37,10 @@ public class Patient {
         this.vaegt = vaegt;
     }
 
-    //TODO: Metoder (med specifikation) til at vedligeholde link til Ordination
+    /**
+     * Tilføjer en ordination til listen af ordinationer.
+     * @param ordination
+     */
     public void addOrdination(Ordination ordination) {
         ordinationer.add(ordination);
     }
