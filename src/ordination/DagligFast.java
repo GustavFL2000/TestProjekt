@@ -1,7 +1,6 @@
 package ordination;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class DagligFast extends Ordination{
@@ -20,6 +19,9 @@ public class DagligFast extends Ordination{
     public double samletDosis() {
         double antalPillerOmDagen = 0;
         for (Dosis dosis : doser) {
+            if(dosis.getAntal() < 0){
+                throw new IllegalArgumentException("Dosis skal være positiv");
+            }
             if (dosis != null) {
                 antalPillerOmDagen += dosis.getAntal();
             }

@@ -2,7 +2,6 @@ package ordination;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class DagligSkaev extends Ordination{
@@ -23,10 +22,6 @@ public class DagligSkaev extends Ordination{
     }
 
 
-    public DagligSkaev(LocalDate startDen, LocalDate slutDen) {
-        super(startDen, slutDen);
-    }
-
     public void opretDosis(LocalTime tid, double antal) {
         Dosis dosis = new Dosis(tid,antal);
         doser.add(dosis);
@@ -39,6 +34,9 @@ public class DagligSkaev extends Ordination{
     public double medicinPåDag(){
         double antalDosis = 0;
         for (Dosis dosis : doser) {
+            if(dosis.getAntal() < 0){
+                throw new IllegalArgumentException("Dosis skal være positiv");
+            }
             antalDosis += dosis.getAntal();
         }
         return antalDosis;
@@ -51,6 +49,13 @@ public class DagligSkaev extends Ordination{
      */
     @Override
     public double samletDosis() {
+        if(medicinPåDag() < 0){
+            throw new IllegalArgumentException("Antal medicin skal være positiv");
+        }
+        if(antalDage() <= 0){
+            throw new IllegalArgumentException("Antal dage skal være mindst 1");
+        }
+
         return medicinPåDag() * antalDage();
     }
 
@@ -61,7 +66,7 @@ public class DagligSkaev extends Ordination{
      */
     @Override
     public double doegnDosis() {
-        return samletDosis() / antalDage();
+        return samletDosis() / antalDage(); //Samme som at returnere medicinPrDag
     }
 
     /**
