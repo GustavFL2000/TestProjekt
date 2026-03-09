@@ -76,8 +76,9 @@ public class PN extends Ordination {
                 sidsteGivning = d;
             }
         }
-        return Math.toIntExact(ChronoUnit.DAYS.between(førsteGivning, sidsteGivning));
-        // returnere dage mellem første og sidste givning
+        return Math.toIntExact(ChronoUnit.DAYS.between(førsteGivning, sidsteGivning)) + 1;
+        // returnere dage mellem første og sidste givning + 1
+        // (+1 er pga at hvis start og slut er samme dag, er det stadig 1 dag personen får medicin)
     }
 
     @Override
