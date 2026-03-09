@@ -75,10 +75,7 @@ public class Controller {
 		DagligFast dagligFast = new DagligFast(startDen, slutDen, laegemiddel);
 
 		// Opretter de 4 doser med de input parametre, som en Dosis skal have. (Tidspunkt og antal).
-		dagligFast.getDoser()[0] = new Dosis(LocalTime.of(8,0), morgenAntal);
-		dagligFast.getDoser()[1] = new Dosis(LocalTime.of(12, 0), middagAntal);
-		dagligFast.getDoser()[2] = new Dosis(LocalTime.of(18, 0), aftenAntal);
-		dagligFast.getDoser()[3] = new Dosis(LocalTime.of(23,59), natAntal);
+		dagligFast.setDoser(morgenAntal, middagAntal, aftenAntal, natAntal);
 
 		// Tilføjer ordinationen til patienten.
 		patient.addOrdination(dagligFast);

@@ -1,6 +1,7 @@
 package ordination;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class DagligFast extends Ordination{
@@ -19,7 +20,9 @@ public class DagligFast extends Ordination{
     public double samletDosis() {
         double antalPillerOmDagen = 0;
         for (Dosis dosis : doser) {
-            antalPillerOmDagen += dosis.getAntal();
+            if (dosis != null) {
+                antalPillerOmDagen += dosis.getAntal();
+            }
         }
         return antalDage() * antalPillerOmDagen;
     }
@@ -36,5 +39,16 @@ public class DagligFast extends Ordination{
 
     public Dosis[] getDoser() {
         return doser.clone();
+    }
+
+    public void setDoser(Dosis[] doser) {
+        this.doser = doser;
+    }
+
+    public void setDoser(double morgenAntal, double middagAntal, double aftenAntal, double natAntal) {
+        doser[0] = new Dosis(LocalTime.of(8,0), morgenAntal);
+        doser[1] = new Dosis(LocalTime.of(12, 0), middagAntal);
+        doser[2] = new Dosis(LocalTime.of(18, 0), aftenAntal);
+        doser[3] = new Dosis(LocalTime.of(17, 0), natAntal);
     }
 }
