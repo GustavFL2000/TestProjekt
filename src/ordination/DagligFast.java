@@ -35,7 +35,6 @@ public class DagligFast extends Ordination{
     }
 
     public Dosis[] getDoser() {
-        Dosis[] tempdoser = doser;
-        return tempdoser;
+        return doser.clone();
     }
 }
