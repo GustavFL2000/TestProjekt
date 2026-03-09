@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.NoSuchElementException;
 
 import ordination.DagligFast;
 import ordination.DagligSkaev;
@@ -75,20 +76,28 @@ public class Controller {
 		return null;
 	}
 
-	/**
-	 * Opretter og returnerer en DagligSkæv ordination. Hvis startDato er efter
-	 * slutDato kastes en IllegalArgumentException og ordinationen oprettes ikke.
-	 * Hvis antallet af elementer i klokkeSlet og antalEnheder er forskellige kastes også en IllegalArgumentException.
-	 *
-	 * Pre: startDen, slutDen, patient og laegemiddel er ikke null
-	 * Pre: alle tal i antalEnheder > 0
-	 */
-	public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen,
-			LocalDate slutDen, Patient patient, Laegemiddel laegemiddel,
-			LocalTime[] klokkeSlet, double[] antalEnheder) {
-		// TODO
-		return null;
-	}
+    /**
+     * Opretter og returnerer en DagligSkæv ordination. Hvis startDato er efter
+     * slutDato kastes en IllegalArgumentException og ordinationen oprettes ikke.
+     * Hvis antallet af elementer i klokkeSlet og antalEnheder er forskellige kastes også en IllegalArgumentException.
+     * <p>
+     * Pre: startDen, slutDen, patient og laegemiddel er ikke null
+     * Pre: alle tal i antalEnheder > 0
+     */
+    public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, LocalTime[] klokkeSlet, double[] antalEnheder) {
+        if (startDen.isAfter(slutDen)) {
+            throw new IllegalArgumentException("Startdato er efter slutdato");
+        }
+        if (klokkeSlet.length != antalEnheder.length) {
+            throw new IllegalArgumentException("Arrays har ikke samme længde");
+        }
+        DagligSkaev dagligSkaev = new DagligSkaev(startDen, slutDen, laegemiddel);
+        for (int i = 0; i < klokkeSlet.length; i++) {
+            dagligSkaev.opretDosis(klokkeSlet[i], antalEnheder[i]);
+        }
+        patient.addOrdination(dagligSkaev);
+        return dagligSkaev;
+    }
 
 	/**
 	 * En dato for hvornår ordinationen anvendes tilføjes ordinationen. Hvis
@@ -110,16 +119,29 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Den anbefalede dosis for den pågældende patient (der skal tages hensyn
-	 * til patientens vægt). Det er en forskellig enheds faktor der skal
-	 * anvendes, og den er afhængig af patientens vægt.
-	 * Pre: patient og lægemiddel er ikke null
-	 */
-	public double anbefaletDosisPrDoegn(Patient patient, Laegemiddel laegemiddel) {
-		//TODO
-		return 0;
-	}
+    /**
+     * Den anbefalede dosis for den pågældende patient (der skal tages hensyn
+     * til patientens vægt). Det er en forskellig enheds faktor der skal
+     * anvendes, og den er afhængig af patientens vægt.
+     * Pre: patient og lægemiddel er ikke null
+     */
+    public double anbefaletDosisPrDoegn(Patient patient, Laegemiddel laegemiddel) {
+        //TODO
+        if (patient == null || laegemiddel == null) {
+            throw new NoSuchElementException("Manglende patient eller lægemiddel");
+        }
+
+        double vaegt = patient.getVaegt(); // Gwwmmer bare lige vægten for læslighed og mindre repitation :9
+
+        if (patient.getVaegt() < 25) { //Let
+            return laegemiddel.getEnhedPrKgPrDoegnLet() * vaegt;
+        }
+        if (patient.getVaegt() > 120) { //Tung
+            return laegemiddel.getEnhedPrKgPrDoegnTung() * vaegt;
+        }
+        //Middel vægt
+        return laegemiddel.getEnhedPrKgPrDoegnNormal() * vaegt;
+    }
 
 	/**
 	 * For et givent vægtinterval og et givent lægemiddel, hentes antallet af
