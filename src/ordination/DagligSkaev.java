@@ -39,6 +39,9 @@ public class DagligSkaev extends Ordination{
     public double medicinPåDag(){
         double antalDosis = 0;
         for (Dosis dosis : doser) {
+            if(dosis.getAntal() < 0){
+                throw new IllegalArgumentException("Dosis skal være positiv");
+            }
             antalDosis += dosis.getAntal();
         }
         return antalDosis;
