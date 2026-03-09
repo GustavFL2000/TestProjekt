@@ -54,6 +54,13 @@ public class DagligSkaev extends Ordination{
      */
     @Override
     public double samletDosis() {
+        if(medicinPåDag() < 0){
+            throw new IllegalArgumentException("Antal medicin skal være positiv");
+        }
+        if(antalDage() <= 0){
+            throw new IllegalArgumentException("Antal dage skal være mindst 1");
+        }
+
         return medicinPåDag() * antalDage();
     }
 
@@ -64,7 +71,7 @@ public class DagligSkaev extends Ordination{
      */
     @Override
     public double doegnDosis() {
-        return samletDosis() / antalDage();
+        return samletDosis() / antalDage(); //Samme som at returnere medicinPrDag
     }
 
     /**
