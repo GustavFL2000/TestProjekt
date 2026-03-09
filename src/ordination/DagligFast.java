@@ -2,18 +2,14 @@ package ordination;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 
 public class DagligFast extends Ordination{
-    private Dosis[] doser = new Dosis[4];
+    private final Dosis[] doser = new Dosis[4];
 
     public DagligFast(LocalDate startDen, LocalDate slutDen, Laegemiddel laegemiddel) {
         super(startDen, slutDen, laegemiddel);
     }
 
-    public DagligFast(LocalDate startDen, LocalDate slutDen) {
-        super(startDen, slutDen);
-    }
 
 
     @Override
@@ -23,9 +19,7 @@ public class DagligFast extends Ordination{
             if(dosis.getAntal() < 0){
                 throw new IllegalArgumentException("Dosis skal være positiv");
             }
-            if (dosis != null) {
                 antalPillerOmDagen += dosis.getAntal();
-            }
         }
         return antalDage() * antalPillerOmDagen;
     }
@@ -44,9 +38,6 @@ public class DagligFast extends Ordination{
         return doser.clone();
     }
 
-    public void setDoser(Dosis[] doser) {
-        this.doser = doser;
-    }
 
     public void setDoser(double morgenAntal, double middagAntal, double aftenAntal, double natAntal) {
         doser[0] = new Dosis(LocalTime.of(8,0), morgenAntal);
