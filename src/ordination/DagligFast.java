@@ -14,6 +14,11 @@ public class DagligFast extends Ordination{
         super(startDen, slutDen);
     }
 
+    public Dosis[] getDoser(){
+        Dosis[] tempdoser = doser;
+        return tempdoser;
+    }
+
     @Override
     public double samletDosis() {
         double antalPillerOmDagen = 0;

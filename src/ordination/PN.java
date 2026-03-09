@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class PN extends Ordination {
 
@@ -13,16 +14,16 @@ public class PN extends Ordination {
     private int antalGangeGivet = 0;
     private List<LocalDate> datoerGivetMedicin = new ArrayList<>();
 
-    public PN(LocalDate startDen, LocalDate slutDen, Laegemiddel lagemiddel) {
+    public PN(LocalDate startDen, LocalDate slutDen, Laegemiddel lagemiddel, double antalEnheder) {
         super(startDen, slutDen, lagemiddel);
         this.antalGangeGivet = 0;
-        this.antalEnheder = 0;
+        this.antalEnheder = antalEnheder;
     }
 
-    public PN(LocalDate startDen, LocalDate slutDen) {
+    public PN(LocalDate startDen, LocalDate slutDen, double antalEnheder) {
         super(startDen, slutDen);
         this.antalGangeGivet = 0;
-        this.antalEnheder = 0;
+        this.antalEnheder = antalEnheder;
     }
 
     /**
@@ -55,8 +56,9 @@ public class PN extends Ordination {
      * forskellen på første og sidste dag givet medicin
      */
     private int forskelFørsteOgSidste() {
-        LocalDate førsteGivning = null;
-        LocalDate sidsteGivning = null;
+        // Objects.requireNonNull(datoerGivetMedicin, "Der er ikke givet medicin endnu");
+        LocalDate førsteGivning;
+        LocalDate sidsteGivning;
 
         try {
             førsteGivning = datoerGivetMedicin.getFirst();
@@ -75,7 +77,7 @@ public class PN extends Ordination {
             }
         }
         return Math.toIntExact(ChronoUnit.DAYS.between(førsteGivning, sidsteGivning));
-        // giver dage mellem første og sidste givning
+        // returnere dage mellem første og sidste givning
     }
 
     @Override

@@ -3,6 +3,8 @@ package controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.NoSuchElementException;
 
 import ordination.*;
 import storage.Storage;
@@ -33,9 +35,27 @@ public class Controller {
 	 * Pre: antal >= 0
 	 * @return opretter og returnerer en PN ordination.
 	 */
-	public PN opretPNOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, double antal) {
-		// TODO
-		return null;
+	public PN opretPNOrdination(LocalDate startDen, LocalDate slutDen,
+			Patient patient, Laegemiddel laegemiddel, double antal) {
+		// TODO: Test metode om virker i GUI
+		// Tjekker om nogle værdier er null, hvis det er; sender en NullPointerException med beskeden.
+		Objects.requireNonNull(startDen, "startDen må ikke være null");
+		Objects.requireNonNull(slutDen, "slutDen må ikke være null");
+		Objects.requireNonNull(patient, "patient må ikke være null");
+		Objects.requireNonNull(laegemiddel, "laegemiddel må ikke være null");
+
+		if (startDen.isAfter(slutDen)) {
+			throw new IllegalArgumentException("Fejl: Startdato skal være før slutdato");
+        }
+
+		if (antal < 0) {
+			throw new IllegalArgumentException("Fejl: Antal skal være positivt tal.");
+		}
+
+		PN newPn = new PN(startDen,slutDen,laegemiddel, antal);
+		patient.addOrdination(newPn);
+
+		return newPn;
 	}
 
 	/**
@@ -66,18 +86,28 @@ public class Controller {
 		return dagligFast;
 	}
 
-	/**
-	 * Opretter og returnerer en DagligSkæv ordination. Hvis startDato er efter
-	 * slutDato kastes en IllegalArgumentException og ordinationen oprettes ikke.
-	 * Hvis antallet af elementer i klokkeSlet og antalEnheder er forskellige kastes også en IllegalArgumentException.
-	 *
-	 * Pre: startDen, slutDen, patient og laegemiddel er ikke null
-	 * Pre: alle tal i antalEnheder > 0
-	 */
-	public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, LocalTime[] klokkeSlet, double[] antalEnheder) {
-		// TODO
-		return null;
-	}
+    /**
+     * Opretter og returnerer en DagligSkæv ordination. Hvis startDato er efter
+     * slutDato kastes en IllegalArgumentException og ordinationen oprettes ikke.
+     * Hvis antallet af elementer i klokkeSlet og antalEnheder er forskellige kastes også en IllegalArgumentException.
+     * <p>
+     * Pre: startDen, slutDen, patient og laegemiddel er ikke null
+     * Pre: alle tal i antalEnheder > 0
+     */
+    public DagligSkaev opretDagligSkaevOrdination(LocalDate startDen, LocalDate slutDen, Patient patient, Laegemiddel laegemiddel, LocalTime[] klokkeSlet, double[] antalEnheder) {
+        if (startDen.isAfter(slutDen)) {
+            throw new IllegalArgumentException("Startdato er efter slutdato");
+        }
+        if (klokkeSlet.length != antalEnheder.length) {
+            throw new IllegalArgumentException("Arrays har ikke samme længde");
+        }
+        DagligSkaev dagligSkaev = new DagligSkaev(startDen, slutDen, laegemiddel);
+        for (int i = 0; i < klokkeSlet.length; i++) {
+            dagligSkaev.opretDosis(klokkeSlet[i], antalEnheder[i]);
+        }
+        patient.addOrdination(dagligSkaev);
+        return dagligSkaev;
+    }
 
 	/**
 	 * En dato for hvornår ordinationen anvendes tilføjes ordinationen. Hvis
@@ -86,19 +116,42 @@ public class Controller {
 	 * Pre: ordination og dato er ikke null
 	 */
 	public void ordinationPNAnvendt(PN ordination, LocalDate dato) {
-		// TODO
+		// TODO: Test metode om virker i GUI
+		// Tjekker om nogle værdier er null, hvis det er; sender en NullPointerException med beskeden.
+		Objects.requireNonNull(ordination, "Ordination må ikke ære null");
+		Objects.requireNonNull(dato, "Dato må ikke være null");
+
+		boolean gyldigAnvendt = ordination.givDosis(dato);
+		// Hvis givDosis returnere false er datoen for ardinationen ikke gyldig og fejl sendes
+		if (!gyldigAnvendt) {
+			throw new IllegalArgumentException("Fejl: Dato for andvendelse af ordination " +
+					"er ikke indenfor gyldighedsperiode");
+		}
 	}
 
-	/**
-	 * Den anbefalede dosis for den pågældende patient (der skal tages hensyn
-	 * til patientens vægt). Det er en forskellig enheds faktor der skal
-	 * anvendes, og den er afhængig af patientens vægt.
-	 * Pre: patient og lægemiddel er ikke null
-	 */
-	public double anbefaletDosisPrDoegn(Patient patient, Laegemiddel laegemiddel) {
-		//TODO
-		return 0;
-	}
+    /**
+     * Den anbefalede dosis for den pågældende patient (der skal tages hensyn
+     * til patientens vægt). Det er en forskellig enheds faktor der skal
+     * anvendes, og den er afhængig af patientens vægt.
+     * Pre: patient og lægemiddel er ikke null
+     */
+    public double anbefaletDosisPrDoegn(Patient patient, Laegemiddel laegemiddel) {
+        //TODO
+        if (patient == null || laegemiddel == null) {
+            throw new NoSuchElementException("Manglende patient eller lægemiddel");
+        }
+
+        double vaegt = patient.getVaegt(); // Gwwmmer bare lige vægten for læslighed og mindre repitation :9
+
+        if (patient.getVaegt() < 25) { //Let
+            return laegemiddel.getEnhedPrKgPrDoegnLet() * vaegt;
+        }
+        if (patient.getVaegt() > 120) { //Tung
+            return laegemiddel.getEnhedPrKgPrDoegnTung() * vaegt;
+        }
+        //Middel vægt
+        return laegemiddel.getEnhedPrKgPrDoegnNormal() * vaegt;
+    }
 
 	/**
 	 * For et givent vægtinterval og et givent lægemiddel, hentes antallet af
@@ -149,8 +202,11 @@ public class Controller {
 		return p;
 	}
 
-	public Laegemiddel opretLaegemiddel(String navn, double enhedPrKgPrDoegnLet, double enhedPrKgPrDoegnNormal, double enhedPrKgPrDoegnTung, String enhed) {
-		Laegemiddel lm = new Laegemiddel(navn, enhedPrKgPrDoegnLet, enhedPrKgPrDoegnNormal, enhedPrKgPrDoegnTung, enhed);
+	public Laegemiddel opretLaegemiddel(String navn,
+			double enhedPrKgPrDoegnLet, double enhedPrKgPrDoegnNormal,
+			double enhedPrKgPrDoegnTung, String enhed) {
+		Laegemiddel lm = new Laegemiddel(navn, enhedPrKgPrDoegnLet,
+				enhedPrKgPrDoegnNormal, enhedPrKgPrDoegnTung, enhed);
 		storage.addLaegemiddel(lm);
 		return lm;
 	}
