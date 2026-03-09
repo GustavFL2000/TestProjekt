@@ -10,8 +10,6 @@ public class DagligFast extends Ordination{
         super(startDen, slutDen, laegemiddel);
     }
 
-
-
     @Override
     public double samletDosis() {
         double antalPillerOmDagen = 0;
