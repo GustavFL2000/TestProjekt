@@ -55,7 +55,7 @@ public class PN extends Ordination {
      * @return {@code -1} hvis der ikke er givet medicin endnu, ellers gives
      * forskellen på første og sidste dag givet medicin
      */
-    private int forskelFørsteOgSidste() {
+    protected int forskelFørsteOgSidste() {
         // Objects.requireNonNull(datoerGivetMedicin, "Der er ikke givet medicin endnu");
         LocalDate førsteGivning;
         LocalDate sidsteGivning;
