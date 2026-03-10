@@ -32,12 +32,17 @@ public class DagligFast extends Ordination{
         return "FAST";
     }
 
+
     public Dosis[] getDoser() {
         return doser.clone();
     }
 
 
     public void setDoser(double morgenAntal, double middagAntal, double aftenAntal, double natAntal) {
+        if (morgenAntal < 0 || middagAntal < 0 || aftenAntal < 0 || natAntal < 0) {
+            throw new IllegalArgumentException("Dosis skal være positiv.");
+        }
+
         doser[0] = new Dosis(LocalTime.of(8,0), morgenAntal);
         doser[1] = new Dosis(LocalTime.of(12, 0), middagAntal);
         doser[2] = new Dosis(LocalTime.of(18, 0), aftenAntal);
